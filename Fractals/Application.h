@@ -17,6 +17,7 @@ private:
 	sf::Text m_TextTimeTaken;
 	sf::Text m_TextPause;
 	sf::Font m_Font;
+	sf::Text m_Zoom;
 	Fractal m_Fractal;
 	sf::Vector2f v_StartPan;
 	sf::Vector2f v_Offset;

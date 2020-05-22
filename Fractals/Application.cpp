@@ -29,8 +29,16 @@ Application::Application(): m_Window(sf::VideoMode(1280, 720),"Fractal Generator
     m_TextPause.setPosition(10.f, 10.f);
     m_TextPause.setCharacterSize(24); // in pixels, not points!
 
-    m_TextPause.setFillColor(sf::Color::Red);
+    m_TextPause.setFillColor(sf::Color::White);
 
+    m_Zoom.setFont(m_Font);
+    m_Zoom.setPosition(10.f, 10.f);
+    m_Zoom.setCharacterSize(24); // in pixels, not points!
+
+    m_Zoom.setFillColor(sf::Color::White);
+
+
+    
     b_IsPaused = false;
     
    
@@ -56,6 +64,7 @@ void Application::Update()
     static bool shouldRedraw = true;
     static sf::Event::EventType lastMouseButtonEvent = sf::Event::MouseButtonReleased;
     
+
     auto screenToWorld = [](const sf::Vector2f vScale, const sf::Vector2f vOffset, const sf::Vector2f& n, sf::Vector2f& v) {
         v.x = (double)(n.x) / vScale.x + vOffset.x;
         v.y = (double)(n.y) / vScale.y + vOffset.y;
@@ -152,21 +161,23 @@ void Application::Update()
             auto tp2 = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> elapsedTime = tp2 - tp1;
             
-            textTool(&m_TextTimeTaken, "Time Taken:" + std::to_string(elapsedTime.count())+" s",
+            textTool(&m_TextTimeTaken, "Time Taken: " + std::to_string(elapsedTime.count())+" s",
                 sf::Vector2f(0, 0), 24, sf::Color::White);
             shouldRedraw = false;
         }
      
   
-        textTool(&m_TextIterations, "Number of Iterations:"+ std::to_string(m_Fractal.GetNumberOfIterations()),
+        textTool(&m_TextIterations, "Number of Iterations: "+ std::to_string(m_Fractal.GetNumberOfIterations()),
             sf::Vector2f(0,30),24,sf::Color::White);
 
         if (b_IsPaused) {
-            textTool(&m_TextPause, "Paused",sf::Vector2f(0, 60), 24, sf::Color::White);
+            textTool(&m_TextPause, "Paused",sf::Vector2f(0, 90), 18, sf::Color::White);
         } 
         else {
-            textTool(&m_TextPause, "", sf::Vector2f(0, 60), 24, sf::Color::White);
+            textTool(&m_TextPause, "", sf::Vector2f(0, 90), 18, sf::Color::White);
         }
+
+        textTool(&m_Zoom, "Zoom: "+std::to_string(((uint32_t)v_Scale.x))+"x", sf::Vector2f(0, 60), 24, sf::Color::White);
         
     }
 }
@@ -179,6 +190,7 @@ void Application::Draw()
     m_Window.draw(m_TextTimeTaken);
     m_Window.draw(m_TextIterations);
     m_Window.draw(m_TextPause);
+    m_Window.draw(m_Zoom);
     m_Window.display();
 }
 

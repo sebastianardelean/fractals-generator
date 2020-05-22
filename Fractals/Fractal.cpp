@@ -30,11 +30,19 @@ void Fractal::Update()
 	int j = 0;
 	for (auto val : m_Pixels)
 	{
-		auto v = m_Colors.at(val);
+		std::tuple<uint8_t, uint8_t, uint8_t> value(0,0,0);
+		if (val < m_Colors.size())
+		{
+			value = m_Colors.at(val);
+
+		}
+		else {
+			value = m_Colors.at(m_Colors.size() - val);
+		}
 		
-		pixels.push_back(std::get<0>(v));
-		pixels.push_back(std::get<1>(v));
-		pixels.push_back(std::get<2>(v));
+		pixels.push_back(std::get<0>(value));
+		pixels.push_back(std::get<1>(value));
+		pixels.push_back(std::get<2>(value));
 		pixels.push_back(128);
 	
 	}
@@ -73,10 +81,10 @@ void Fractal::Generate(sf::Vector2f pxTl, sf::Vector2f pxBr, sf::Vector2f frTl, 
 void Fractal::GenerateColors()
 {
 	int i = 0;
-	for (i = 0; i < 256; i ++)
+	for (i = 0; i < 256; i+=8)
 	{
-		for (int j = 0; j < 256; j++) {
-			for (int k = 0; k < 256; k++) {
+		for (int j = 0; j < 256; j+=8) {
+			for (int k = 0; k < 256; k+=8) {
 				m_Colors.push_back(std::make_tuple(i, j, k));
 
 			}
